@@ -1,15 +1,10 @@
 import { LogoAexol } from '@/src/assets';
 import { ContentContainer } from '@/src/components/atoms';
 import { UserMenu } from '@/src/components/molecules/UserMenu';
-
 import { Stack } from '@/src/components/atoms/Stack';
 import styled from '@emotion/styled';
 import { Link } from '@/src/components/atoms/Link';
 import { useCart } from '@/src/state/cart';
-
-// import { Cart } from '@/src/layouts/Cart';
-// import { LanguageSwitcher } from '@/src/components';
-
 import { CartDrawer } from '@/src/layouts/CartDrawer';
 import { CollectionTileType, NavigationType } from '@/src/graphql/selectors';
 import { RootNode } from '@/src/util/arrayToTree';
@@ -45,13 +40,11 @@ export const Navigation: React.FC<NavigationProps> = ({ navigation, categories, 
     const iconRef = useRef<HTMLButtonElement>(null);
 
     const handleOutsideClick = (event: MouseEvent) => {
+        const target = event.target as Node;
         if (
-            searchRef.current &&
-            !searchRef.current.contains(event.target as Node) &&
-            iconRef.current &&
-            !iconRef.current.contains(event.target as Node) &&
-            searchMobileRef.current &&
-            !searchMobileRef.current.contains(event.target as Node)
+            searchRef.current && !searchRef.current.contains(target) &&
+            iconRef.current && !iconRef.current.contains(target) &&
+            searchMobileRef.current && !searchMobileRef.current.contains(target)
         ) {
             navigationSearch.closeSearch();
         }
@@ -64,17 +57,12 @@ export const Navigation: React.FC<NavigationProps> = ({ navigation, categories, 
         };
     }, []);
 
-    // THIS SHOULD COME FROM PLUGIN
-    const entries = [
-        { text: t('announcements-bar')[0], href: '/collections/all' },
-        { text: t('announcements-bar')[1], href: '/' },
-        { text: t('announcements-bar')[2], href: '/' },
-        { text: t('announcements-bar')[3], href: '/' },
-    ];
+    // Ensure that the translation keys are correctly accessed
+    const entries = t('announcements-bar', { returnObjects: true }) as string[];
 
     return (
         <>
-            <AnnouncementBar entries={entries} secondsBetween={5} />
+            <AnnouncementBar entries={entries.map((text, index) => ({ text, href: index === 0 ? '/collections/all' : '/' }))} secondsBetween={5} />
             <StickyContainer>
                 <ContentContainer>
                     <Stack itemsCenter justifyBetween gap="5rem" w100>
@@ -112,47 +100,4 @@ export const Navigation: React.FC<NavigationProps> = ({ navigation, categories, 
                     </Stack>
                 </ContentContainer>
                 {navigationSearch.searchOpen && (
-                    <MobileNavigationContainer ref={searchMobileRef}>
-                        <NavigationSearch {...navigationSearch} />
-                    </MobileNavigationContainer>
-                )}
-            </StickyContainer>
-
-            {categories?.length > 0 ? <CategoryBar collections={categories} /> : null}
-        </>
-    );
-};
-
-const StickyContainer = styled.nav`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
-    width: 100%;
-    padding: 2rem;
-    position: sticky;
-    top: 0;
-    background: ${p => p.theme.gray(0)};
-    z-index: 2137;
-    border-bottom: 1px solid ${p => p.theme.gray(100)};
-    svg {
-        max-height: 4rem;
-    }
-`;
-
-const MobileNavigationContainer = styled.div`
-    display: block;
-    padding: 2.5rem 2rem 0 2rem;
-    width: 100%;
-    @media (min-width: ${p => p.theme.breakpoints.md}) {
-        display: none;
-    }
-`;
-
-const DesktopNavigationContainer = styled(motion.div)`
-    display: none;
-    @media (min-width: ${p => p.theme.breakpoints.md}) {
-        display: block;
-    }
-`;
+                    <MobileNavigationContainer ref={searchMobile
