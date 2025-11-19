@@ -5,20 +5,20 @@
     "plugin:@typescript-eslint/recommended",
     "plugin:react/recommended",
     "plugin:prettier/recommended",
-    "next/core-web-vitals" // Added Next.js plugin
+    "next/core-web-vitals"
   ],
   "parserOptions": {
-    "ecmaVersion": 2018,
+    "ecmaVersion": 2020, // Updated to a more recent version
     "sourceType": "module"
   },
   "plugins": [
     "react",
     "@typescript-eslint",
-    "next" // Added Next.js plugin
+    "next"
   ],
   "settings": {
     "react": {
-      "version": "detect" // Automatically detect the React version
+      "version": "detect"
     }
   },
   "rules": {
@@ -26,7 +26,7 @@
     "react/display-name": "off",
     "@typescript-eslint/ban-ts-comment": "off",
     "react/no-unknown-property": "off",
-    "react/react-in-jsx-scope": "off",
+    "react/react-in-jsx-scope": "off", // React 17 onwards, it's not needed
     "react/prop-types": "off",
     "prettier/prettier": [
       "error",
